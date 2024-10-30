@@ -11,21 +11,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(dg5(*%ld35600-(ednr1bc+)=368_1-$mw3$(0(k_ym&*oqzd'
+SECRET_KEY = os.getenv('PROJECT_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOST'))
 
 
 # Application definition
@@ -78,11 +82,11 @@ WSGI_APPLICATION = 'tech_deals.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'components', 
-        'USER': 'mubin',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1', 
-        'PORT': '8080',
+        'NAME': os.getenv('DATABASE_NAME'), 
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'), 
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 

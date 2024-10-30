@@ -1,0 +1,40 @@
+version: '3'
+services:
+  web:
+    build: .
+    command:
+      - /bin/sh
+      - '-c'
+      - |
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py scrape_components_and_save_into_db startech
+        python manage.py scrape_components_and_save_into_db skyland
+        python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - '.:/app'
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 8080
+      DB_NAME: components
+      DB_USER: mubin
+      DB_PASSWORD: postgres
+    networks:
+      - mynetwork
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: mubin
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: components
+    ports:
+      - '8080:5432'
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
